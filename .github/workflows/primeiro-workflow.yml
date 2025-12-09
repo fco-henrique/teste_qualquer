@@ -3,7 +3,7 @@ name: Primeiro Workflow - Relatório de Execução
 on:
   push:
     branches:
-      - "**"      
+      - "**"
 
 jobs:
   executar-pipeline:
@@ -18,11 +18,25 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Mostrar arquivos do projeto
+      - name: Listar arquivos da raiz
         run: ls -la
 
-      - name: Executar mensagem de sucesso
-        run: echo "Pipeline executada com sucesso!"
+      - name: Listar arquivos da pasta proj-vendas-online
+        run: ls -la proj-vendas-online
 
-      - name: Instalar dependências
-        run: cd proj-vendas-online && npm install
+      - name: Listar arquivos do src
+        run: ls -la proj-vendas-online/src
+
+      - name: Listar arquivos das rotas
+        run: ls -la proj-vendas-online/src/routes
+
+      - name: Listar arquivos do public
+        run: ls -la proj-vendas-online/public
+
+      - name: Instalar dependências do Node
+        run: |
+          cd proj-vendas-online
+          npm install
+
+      - name: Executar mensagem final
+        run: echo "Pipeline executada com sucesso!"
