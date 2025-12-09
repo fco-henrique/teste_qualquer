@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: gc-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:h3nr1qu3@postgres_db:5432/gc
+    depends_on:
+      - postgres_db 
+    networks:
+      - app-network
+
+  postgres_db:
+    image: postgres:16-alpine 
+    container_name: gc-bd 
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 'h3nr1qu3'
+      POSTGRES_DB: gc 
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pg-data:
+    driver: local

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos - Vendas Online API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        #products-table { width: 80%; border-collapse: collapse; margin-top: 20px; }
+        #products-table th, #products-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        #products-table th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Produtos Cadastrados</h1>
+    <table id="products-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody id="products-list">
+            <tr><td colspan="3">Carregando produtos...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        const API_URL = '/products'; 
+
+        async function fetchProducts() {
+            const productsList = document.getElementById('products-list');
+            
+            try {
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! Status: ${response.status}`);
+                }
+                
+                const products = await response.json();
+                
+                productsList.innerHTML = ''; 
+
+                if (products.length === 0) {
+                    productsList.innerHTML = '<tr><td colspan="3">Nenhum produto cadastrado.</td></tr>';
+                    return;
+                }
+
+                products.forEach(product => {
+                    const row = productsList.insertRow();
+                    row.insertCell(0).textContent = product.id;
+                    row.insertCell(1).textContent = product.name;
+                    row.insertCell(2).textContent = `R$ ${parseFloat(product.price).toFixed(2)}`;
+                });
+
+            } catch (error) {
+                console.error("Erro ao buscar produtos:", error);
+                productsList.innerHTML = `<tr><td colspan="3">Falha ao carregar os dados: ${error.message}</td></tr>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+    </script>
+</body>
+</html>
