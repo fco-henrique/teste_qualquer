@@ -25,4 +25,4 @@ jobs:
         run: echo "Pipeline executada com sucesso!"
 
       - name: Instalar dependências
-        run: npm install
+        run: cd proj-vendas-online && npm install
